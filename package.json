@@ -1,0 +1,21 @@
+{
+  "name": "vcc",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000i\u0000n\u0000t\u0000e\u0000r\u0000v\u0000i\u0000e\u0000w\u0000_\u0000p\u0000r\u0000e\u0000p\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaushalrajj/interview_prep.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kaushalrajj/interview_prep/issues"
+  },
+  "homepage": "https://github.com/kaushalrajj/interview_prep#readme"
+}
