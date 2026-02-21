@@ -4,6 +4,8 @@ import express from "express";
 import dotenv from "dotenv";
 import path from "path";
 import { ENV } from "./lib/env.js";
+import { connectDb } from "./lib/db.js";
+import { start } from "repl";
 
 dotenv.config();
 
@@ -22,7 +24,20 @@ app.get("*", (req,res)=>{
     res.sendFile(path.join(__dirname,"../frontend/dist/index.html"))
 });
 }
-const PORT = ENV.PORT;
-app.listen(PORT,()=>{
-    console.log(`server is running on the port ${ENV.PORT}`);
-})
+// const PORT = ENV.PORT;
+// app.listen(PORT,()=>{
+//     console.log(`server is running on the port ${ENV.PORT}`);
+//     connectDb();
+// })
+
+const startServer = async()=>{
+    try{
+        await connectDb();
+        app.listen(ENV.PORT,()=> console.log(`server is running on port ${ENV.PORT}`))
+    }
+    catch(error){
+        console.error(`server failed to start: ${error.message}`);
+        process.exit(1);    
+    }
+}
+startServer();
