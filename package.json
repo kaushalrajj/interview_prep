@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/kaushalrajj/interview_prep/issues"
   },
-  "homepage": "https://github.com/kaushalrajj/interview_prep#readme"
+  "homepage": "https://github.com/kaushalrajj/interview_prep#readme",
+  "dependencies": {
+    "@clerk/clerk-react": "^5.61.1"
+  }
 }
