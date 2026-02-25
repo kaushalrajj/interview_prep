@@ -3,6 +3,7 @@ console.log("starting server....");
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
+import cors from "cors";
 import { ENV } from "./lib/env.js";
 import { connectDb } from "./lib/db.js";
 import { start } from "repl";
@@ -10,8 +11,12 @@ import { start } from "repl";
 dotenv.config();
 
 const app = express();
-
 const __dirname = path.resolve();
+
+
+app.use(express.json());
+app.use(cors({origin:ENV.CLIENT_URL,credentials:true}));
+
 
 app.get("/health",(req,res)=>{
     res.status(200).json({message:"okay apis working herre babe "})
