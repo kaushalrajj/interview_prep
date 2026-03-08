@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 import {ENV} from './env.js';
 
-export const connectDb = async()=>{
+export const connectDB = async()=>{
     try{
         if(!ENV.DB_URL){
             throw new Error("DB_URL is not defined in environment variables");
@@ -15,3 +15,4 @@ export const connectDb = async()=>{
         process.exit(1);
     }
 }
+// https://github.com/burakorkmez/talent-IQ/blob/master/backend/src/lib/inngest.js
