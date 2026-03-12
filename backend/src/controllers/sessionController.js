@@ -50,7 +50,7 @@ export async function getActiveSession(req, res) {
   try {
     const sessions = await Session.find({ status: "active" })
       .populate("host", "name profileImage email clerkId")
-      .sort({ createdat: -1 })
+      .sort({ createdAt: -1 })
       .limit(20);
     res.status(200).json({ sessions });
   } catch (error) {
@@ -59,7 +59,7 @@ export async function getActiveSession(req, res) {
   }
 }
 
-export async function getMyRecentSession(req, res) {
+export async function getMyRecentSessions(req, res) {
   try {
     const userId = req.user._id;
     const sessions = await Session.find({
@@ -90,39 +90,39 @@ export async function getSessionById(req, res) {
   }
 }
 
-export async function JoinSession(req, res) {
+export async function joinSession(req, res) {
   try {
     const { id } = req.params;
-    const userId = req.uer._id;
+    const userId = req.user._id;
     const clerkId = req.user.clerkId;
 
     const session = await Session.findById(id);
+
     if (!session)
-      return res.status(404).json({ message: "session not found " });
+      return res.status(404).json({ message: "session not found" });
 
-    if (session.status !== "active") {
+    if (session.status !== "active")
       return res.status(400).json({ message: "session is not active" });
-    }
 
-    if (session.host.toString() === userId.toString()) {
+    if (session.host.toString() === userId.toString())
       return res.status(400).json({ message: "host cannot join as participant" });
-    }
-    
-    if (session.participant) {
-      return res.status(404).json({ message: "session is full" });
-    }
+
+    if (session.participant)
+      return res.status(400).json({ message: "session is full" });
 
     session.participant = userId;
+
     await session.save();
+
     const channel = chatClient.channel("messaging", session.callId);
+
     await channel.addMembers([clerkId]);
-    res.status(200).json({ Session });
+
+    res.status(200).json({ session });
+
   } catch (error) {
-    console.log(
-      "error in joining session maybe joinSession controller:",
-      error.message,
-    );
-    res.status(500).json({ message: "internal Server Error" });
+    console.log("error in joinSession controller:", error.message);
+    res.status(500).json({ message: "internal server error" });
   }
 }
 
@@ -130,27 +130,31 @@ export async function endSession(req, res) {
   try {
     const { id } = req.params;
     const userId = req.user._id;
+
     const session = await Session.findById(id);
-    if (!session) return res.status(404).json({ message: "session not found" });
+
+    if (!session)
+      return res.status(404).json({ message: "session not found" });
+
     if (session.host.toString() !== userId.toString())
       return res.status(403).json({ message: "only host can end the session" });
-    if (session.status == "completed") {
-      return res.status(400).json({ message: "session is already completed" });
-    }
 
+    if (session.status === "completed")
+      return res.status(400).json({ message: "session is already completed" });
 
     const call = streamClient.video.call("default", session.callId);
     await call.delete({ hard: true });
+
     const channel = chatClient.channel("messaging", session.callId);
     await channel.delete();
-        session.status = "completed";
+
+    session.status = "completed";
     await session.save();
+
     res.status(200).json({ message: "session ended successfully" });
+
   } catch (error) {
-    console.log(
-      "error in ending session maybe endSession controller:",
-      error.message,
-    );
+    console.log("error in endSession controller:", error.message);
     res.status(500).json({ message: "internal Server Error" });
   }
 }
