@@ -6,7 +6,7 @@ import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
 import { inngest, functions } from "./lib/inngest.js";
 import chatRoute from "./routes/chatRoutes.js";
-
+import sessionRoutes from "./routes/sessionRoutes.js"
 import { clerkMiddleware } from "@clerk/express";
 import dotenv from "dotenv";
 
@@ -21,6 +21,7 @@ app.use(clerkMiddleware());
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/chat", chatRoute);
+app.use("/api/sessions", sessionRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "API working" });
