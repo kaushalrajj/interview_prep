@@ -26,7 +26,7 @@ app.use("/api/webhooks", clerkWebhookRoutes);
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "API working" });
 });
-console.log("Webhook event:", evt.type);
+// console.log("Webhook event:", evt.type);
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
