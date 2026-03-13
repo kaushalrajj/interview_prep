@@ -9,7 +9,7 @@ import chatRoute from "./routes/chatRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js"
 import { clerkMiddleware } from "@clerk/express";
 import dotenv from "dotenv";
-
+import clerkWebhookRoutes from "./routes/clerkWebhook.js";
 dotenv.config();
 
 const app = express();
@@ -22,11 +22,11 @@ app.use(clerkMiddleware());
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/chat", chatRoute);
 app.use("/api/sessions", sessionRoutes);
-
+app.use("/api/webhooks", clerkWebhookRoutes);
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "API working" });
 });
-
+console.log("Webhook event:", evt.type);
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
